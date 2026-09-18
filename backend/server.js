@@ -3,10 +3,10 @@ const cors = require("cors");
 require("dotenv").config();
 
 const app = express();
-
+const casesRoutes = require("./routes/cases");
 app.use(cors());
 app.use(express.json());
-
+app.use("/api/cases", casesRoutes);
 app.get("/", (req, res) => {
     res.json({
         system: "CCUMS-MISUNGWI",
