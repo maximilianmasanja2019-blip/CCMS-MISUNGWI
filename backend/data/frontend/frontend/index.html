@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CCUMS-MISUNGWI Dashboard</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f6f9;
+            color: #222;
+        }
+
+        .header {
+            background: #123c69;
+            color: white;
+            padding: 18px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 22px;
+        }
+
+        .header p {
+            font-size: 13px;
+            margin-top: 4px;
+        }
+
+        .user-area {
+            text-align: right;
+            font-size: 13px;
+        }
+
+        .logout {
+            margin-top: 7px;
+            padding: 7px 14px;
+            border: none;
+            border-radius: 5px;
+            background: #dc3545;
+            color: white;
+            cursor: pointer;
+        }
+
+        .container {
+            padding: 25px;
+        }
+
+        .welcome {
+            margin-bottom: 25px;
+        }
+
+        .welcome h2 {
+            color: #123c69;
+            margin-bottom: 6px;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+            gap: 18px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            padding: 22px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.12);
+        }
+
+        .card-icon {
+            font-size: 30px;
+            margin-bottom: 12px;
+        }
+
+        .card h3 {
+            color: #123c69;
+            margin-bottom: 7px;
+        }
+
+        .card p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .section {
+            background: white;
+            padding: 22px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+        }
+
+        .section h3 {
+            color: #123c69;
+            margin-bottom: 15px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+        }
+
+        .info {
+            background: #f7f9fb;
+            padding: 15px;
+            border-radius: 7px;
+        }
+
+        .info strong {
+            display: block;
+            color: #123c69;
+            margin-bottom: 5px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #777;
+            font-size: 13px;
+        }
+
+        @media (max-width: 600px) {
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .user-area {
+                text-align: left;
+            }
+
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header class="header">
+
+        <div>
+            <h1>⚖️ CCUMS-MISUNGWI</h1>
+            <p>Court Case Update Management System</p>
+        </div>
+
+        <div class="user-area">
+            <div id="userName">Mtumiaji</div>
+            <div id="userRole">Role</div>
+
+            <button class="logout" onclick="logout()">
+                Toka
+            </button>
+        </div>
+
+    </header>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="container">
+
+        <div class="welcome">
+
+            <h2>Dashboard</h2>
+
+            <p>
+                Karibu kwenye mfumo wa kusimamia na kuhuisha taarifa za mashauri.
+            </p>
+
+        </div>
+
+
+        <!-- DASHBOARD CARDS -->
+        <div class="cards">
+
+            <div class="card" onclick="openSection('cases')">
+
+                <div class="card-icon">📁</div>
+
+                <h3>Mashauri</h3>
+
+                <p>
+                    Sajili, tafuta na kuona taarifa za mashauri.
+                </p>
+
+            </div>
+
+
+            <div class="card" onclick="openSection('updates')">
+
+                <div class="card-icon">🔄</div>
+
+                <h3>Case Updates</h3>
+
+                <p>
+                    Kuhuisha hatua na maendeleo ya mashauri.
+                </p>
+
+            </div>
+
+
+            <div class="card" onclick="openSection('reports')">
+
+                <div class="card-icon">📊</div>
+
+                <h3>Ripoti</h3>
+
+                <p>
+                    Tengeneza na kuona ripoti za mashauri.
+                </p>
+
+            </div>
+
+
+            <div class="card" onclick="openSection('courts')">
+
+                <div class="card-icon">🏛️</div>
+
+                <h3>Mahakama</h3>
+
+                <p>
+                    Usimamizi wa Mahakama ya Wilaya na Mahakama ya Mwanzo.
+                </p>
+
+            </div>
+
+
+            <div class="card" onclick="openSection('stations')">
+
+                <div class="card-icon">🏢</div>
+
+                <h3>Vituo</h3>
+
+                <p>
+                    Simamia vituo vya Mahakama ya Mwanzo.
+                </p>
+
+            </div>
+
+
+            <div class="card" onclick="openSection('users')">
+
+                <div class="card-icon">👥</div>
+
+                <h3>Watumiaji</h3>
+
+                <p>
+                    Usimamizi wa watumiaji na ruhusa zao.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- SYSTEM INFORMATION -->
+        <div class="section">
+
+            <h3>🏛️ Muundo wa Mfumo</h3>
+
+            <div class="info-grid">
+
+                <div class="info">
+                    <strong>Mahakama ya Wilaya</strong>
+                    <span>Usimamizi wa ngazi ya Wilaya</span>
+                </div>
+
+                <div class="info">
+                    <strong>Mahakama ya Mwanzo Misungwi</strong>
+                    <span>Usimamizi wa mashauri ya Mahakama ya Mwanzo</span>
+                </div>
+
+                <div class="info">
+                    <strong>Vituo</strong>
+                    <span>Usimamizi wa vituo vya Mahakama ya Mwanzo</span>
+                </div>
+
+                <div class="info">
+                    <strong>Audit Logs</strong>
+                    <span>Historia ya shughuli za watumiaji</span>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- SYSTEM STATUS -->
+        <div class="section">
+
+            <h3>🔐 Hali ya Mfumo</h3>
+
+            <div class="info-grid">
+
+                <div class="info">
+                    <strong>Authentication</strong>
+                    <span>JWT Authentication</span>
+                </div>
+
+                <div class="info">
+                    <strong>Permissions</strong>
+                    <span>Role-Based Access Control</span>
+                </div>
+
+                <div class="info">
+                    <strong>Database</strong>
+                    <span>PostgreSQL</span>
+                </div>
+
+                <div class="info">
+                    <strong>System</strong>
+                    <span>CCUMS-MISUNGWI V1</span>
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <footer>
+        CCUMS-MISUNGWI © 2026
+    </footer>
+
+
+    <script>
+
+        // CHECK LOGIN
+        const token = localStorage.getItem("ccums_token");
+
+        const userData =
+            localStorage.getItem("ccums_user");
+
+        if (!token) {
+
+            window.location.href = "index.html";
+
+        }
+
+
+        // DISPLAY USER INFORMATION
+        if (userData) {
+
+            try {
+
+                const user =
+                    JSON.parse(userData);
+
+                document.getElementById("userName").textContent =
+                    user.full_name || user.username || "Mtumiaji";
+
+                document.getElementById("userRole").textContent =
+                    user.role || "User";
+
+            } catch (error) {
+
+                console.error(
+                    "User data error:",
+                    error
+                );
+
+            }
+
+        }
+
+
+        // LOGOUT
+        function logout() {
+
+            localStorage.removeItem("ccums_token");
+
+            localStorage.removeItem("ccums_user");
+
+            window.location.href = "index.html";
+
+        }
+
+
+        // TEMPORARY SECTION HANDLER
+        function openSection(section) {
+
+            alert(
+                "Sehemu ya " +
+                section +
+                " itaunganishwa kwenye mfumo katika hatua inayofuata."
+            );
+
+        }
+
+    </script>
+
+</body>
+</html>
