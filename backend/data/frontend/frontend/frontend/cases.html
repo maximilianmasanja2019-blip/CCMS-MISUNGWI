@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CCUMS-MISUNGWI - Mashauri</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f6f9;
+            color: #222;
+        }
+
+        .header {
+            background: #123c69;
+            color: white;
+            padding: 18px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 21px;
+        }
+
+        .header p {
+            font-size: 13px;
+            margin-top: 5px;
+        }
+
+        .back {
+            background: white;
+            color: #123c69;
+            border: none;
+            padding: 9px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .container {
+            padding: 25px;
+        }
+
+        .title {
+            margin-bottom: 20px;
+        }
+
+        .title h2 {
+            color: #123c69;
+            margin-bottom: 6px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        button {
+            border: none;
+            border-radius: 5px;
+            padding: 11px 17px;
+            cursor: pointer;
+        }
+
+        .add-btn {
+            background: #198754;
+            color: white;
+        }
+
+        .refresh-btn {
+            background: #123c69;
+            color: white;
+        }
+
+        .search-box {
+            background: white;
+            padding: 18px;
+            border-radius: 9px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 15px;
+        }
+
+        .table-container {
+            background: white;
+            padding: 20px;
+            border-radius: 9px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 750px;
+        }
+
+        th,
+        td {
+            padding: 13px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background: #123c69;
+            color: white;
+        }
+
+        tr:hover {
+            background: #f5f7fa;
+        }
+
+        .status {
+            padding: 5px 9px;
+            border-radius: 12px;
+            font-size: 12px;
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .view-btn {
+            background: #0d6efd;
+            color: white;
+            padding: 7px 11px;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 35px;
+            color: #777;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.55);
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: white;
+            max-width: 650px;
+            margin: 40px auto;
+            padding: 25px;
+            border-radius: 10px;
+        }
+
+        .modal-content h2 {
+            color: #123c69;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .form-group textarea {
+            min-height: 90px;
+            resize: vertical;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .cancel-btn {
+            background: #6c757d;
+            color: white;
+        }
+
+        .save-btn {
+            background: #198754;
+            color: white;
+        }
+
+        @media (max-width: 600px) {
+
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header class="header">
+
+        <div>
+            <h1>⚖️ CCUMS-MISUNGWI</h1>
+            <p>Usimamizi wa Mashauri</p>
+        </div>
+
+        <button class="back" onclick="goDashboard()">
+            ← Dashboard
+        </button>
+
+    </header>
+
+
+    <main class="container">
+
+        <div class="title">
+
+            <h2>📁 Mashauri</h2>
+
+            <p>
+                Sajili, tafuta na kuona taarifa za mashauri.
+            </p>
+
+        </div>
+
+
+        <!-- ACTIONS -->
+        <div class="actions">
+
+            <button class="add-btn" onclick="openModal()">
+                ➕ Ongeza Shauri
+            </button>
+
+            <button class="refresh-btn" onclick="loadCases()">
+                🔄 Refresh
+            </button>
+
+        </div>
+
+
+        <!-- SEARCH -->
+        <div class="search-box">
+
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="🔎 Tafuta kwa namba ya shauri, aina au wahusika..."
+                onkeyup="searchCases()"
+            >
+
+        </div>
+
+
+        <!-- TABLE -->
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>#</th>
+                        <th>Namba ya Shauri</th>
+                        <th>Aina</th>
+                        <th>Mahakama</th>
+                        <th>Hali</th>
+                        <th>Tarehe Ijayo</th>
+                        <th>Kitendo</th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="casesTable">
+
+                    <tr>
+                        <td colspan="7" class="empty">
+                            Hakuna mashauri yaliyopakiwa.
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </main>
+
+
+    <!-- ADD CASE MODAL -->
+    <div class="modal" id="caseModal">
+
+        <div class="modal-content">
+
+            <h2>➕ Sajili Shauri Jipya</h2>
+
+            <form id="caseForm">
+
+                <div class="form-group">
+
+                    <label>Namba ya Shauri</label>
+
+                    <input
+                        type="text"
+                        id="caseNumber"
+                        placeholder="Mfano: Civil Case 01/2026"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Aina ya Shauri</label>
+
+                    <select id="caseType" required>
+
+                        <option value="">
+                            -- Chagua aina --
+                        </option>
+
+                        <option value="CRIMINAL">
+                            Jinai
+                        </option>
+
+                        <option value="CIVIL">
+                            Madai
+                        </option>
+
+                        <option value="DIVORCE">
+                            Talaka
+                        </option>
+
+                        <option value="PROBATE">
+                            Mirathi
+                        </option>
+
+                        <option value="OTHER">
+                            Nyingine
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Mahakama</label>
+
+                    <select id="court" required>
+
+                        <option value="">
+                            -- Chagua Mahakama --
+                        </option>
+
+                        <option value="DISTRICT COURT">
+                            Mahakama ya Wilaya
+                        </option>
+
+                        <option value="MISUNGWI PRIMARY COURT">
+                            Mahakama ya Mwanzo Misungwi
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Wahusika</label>
+
+                    <input
+                        type="text"
+                        id="parties"
+                        placeholder="Mfano: A vs B"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Tarehe ya Kufungua</label>
+
+                    <input
+                        type="date"
+                        id="filingDate"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Tarehe Ijayo</label>
+
+                    <input
+                        type="date"
+                        id="nextDate"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Maelezo</label>
+
+                    <textarea
+                        id="description"
+                        placeholder="Maelezo ya awali ya shauri..."
+                    ></textarea>
+
+                </div>
+
+
+                <div class="modal-actions">
+
+                    <button
+                        type="button"
+                        class="cancel-btn"
+                        onclick="closeModal()"
+                    >
+                        Ghairi
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="save-btn"
+                    >
+                        💾 Hifadhi
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        // LOGIN CHECK
+        const token =
+            localStorage.getItem("ccums_token");
+
+        if (!token) {
+
+            window.location.href = "index.html";
+
+        }
+
+
+        // DASHBOARD
+        function goDashboard() {
+
+            window.location.href =
+                "dashboard.html";
+
+        }
+
+
+        // OPEN MODAL
+        function openModal() {
+
+            document.getElementById(
+                "caseModal"
+            ).style.display = "block";
+
+        }
+
+
+        // CLOSE MODAL
+        function closeModal() {
+
+            document.getElementById(
+                "caseModal"
+            ).style.display = "none";
+
+        }
+
+
+        // LOAD CASES
+        async function loadCases() {
+
+            const table =
+                document.getElementById(
+                    "casesTable"
+                );
+
+            try {
+
+                const response =
+                    await fetch("/api/cases");
+
+                const result =
+                    await response.json();
+
+                if (
+                    result.success &&
+                    result.data &&
+                    result.data.length > 0
+                ) {
+
+                    displayCases(
+                        result.data
+                    );
+
+                } else {
+
+                    table.innerHTML = `
+                        <tr>
+                            <td colspan="7" class="empty">
+                                Hakuna mashauri yaliyopakiwa.
+                            </td>
+                        </tr>
+                    `;
+
+                }
+
+            } catch (error) {
+
+                console.error(error);
+
+                table.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="empty">
+                            Hakuna data kutoka kwenye server kwa sasa.
+                        </td>
+                    </tr>
+                `;
+
+            }
+
+        }
+
+
+        // DISPLAY CASES
+        function displayCases(cases) {
+
+            const table =
+                document.getElementById(
+                    "casesTable"
+                );
+
+            table.innerHTML = "";
+
+            cases.forEach(
+                (item, index) => {
+
+                    const row =
+                        document.createElement(
+                            "tr"
+                        );
+
+                    row.innerHTML = `
+
+                        <td>${index + 1}</td>
+
+                        <td>
+                            <strong>
+                                ${item.case_number || "-"}
+                            </strong>
+                        </td>
+
+                        <td>
+                            ${item.case_type || "-"}
+                        </td>
+
+                        <td>
+                            ${item.court_name || "-"}
+                        </td>
+
+                        <td>
+                            <span class="status">
+                                ${item.case_status || "PENDING"}
+                            </span>
+                        </td>
+
+                        <td>
+                            ${item.next_date || "-"}
+                        </td>
+
+                        <td>
+                            <button
+                                class="view-btn"
+                                onclick="viewCase('${item.id}')"
+                            >
+                                Angalia
+                            </button>
+                        </td>
+
+                    `;
+
+                    table.appendChild(row);
+
+                }
+            );
+
+        }
+
+
+        // SEARCH
+        function searchCases() {
+
+            const search =
+                document.getElementById(
+                    "searchInput"
+                ).value.toLowerCase();
+
+            const rows =
+                document.querySelectorAll(
+                    "#casesTable tr"
+                );
+
+            rows.forEach(row => {
+
+                const text =
+                    row.textContent.toLowerCase();
+
+                row.style.display =
+                    text.includes(search)
+                    ? ""
+                    : "none";
+
+            });
+
+        }
+
+
+        // VIEW CASE
+        function viewCase(id) {
+
+            alert(
+                "Taarifa za shauri ID: " +
+                id +
+                " zitaonyeshwa hapa."
+            );
+
+        }
+
+
+        // SAVE CASE
+        document.getElementById(
+            "caseForm"
+        ).addEventListener(
+            "submit",
+            async function(event) {
+
+                event.preventDefault();
+
+                const caseData = {
+
+                    case_number:
+                        document.getElementById(
+                            "caseNumber"
+                        ).value,
+
+                    case_type:
+                        document.getElementById(
+                            "caseType"
+                        ).value,
+
+                    court_name:
+                        document.getElementById(
+                            "court"
+                        ).value,
+
+                    parties:
+                        document.getElementById(
+                            "parties"
+                        ).value,
+
+                    filing_date:
+                        document.getElementById(
+                            "filingDate"
+                        ).value,
+
+                    next_date:
+                        document.getElementById(
+                            "nextDate"
+                        ).value,
+
+                    description:
+                        document.getElementById(
+                            "description"
+                        ).value
+
+                };
+
+
+                try {
+
+                    const response =
+                        await fetch(
+                            "/api/cases",
+                            {
+                                method: "POST",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/json",
+
+                                    "Authorization":
+                                        "Bearer " +
+                                        token
+                                },
+
+                                body:
+                                    JSON.stringify(
+                                        caseData
+                                    )
+                            }
+                        );
+
+
+                    const result =
+                        await response.json();
+
+                    if (result.success) {
+
+                        alert(
+                            "Shauri limehifadhiwa."
+                        );
+
+                        closeModal();
+
+                        document.getElementById(
+                            "caseForm"
+                        ).reset();
+
+                        loadCases();
+
+                    } else {
+
+                        alert(
+                            result.message ||
+                            "Imeshindikana kuhifadhi shauri."
+                        );
+
+                    }
+
+                } catch (error) {
+
+                    console.error(error);
+
+                    alert(
+                        "Server haipatikani kwa sasa."
+                    );
+
+                }
+
+            }
+        );
+
+
+        // INITIAL LOAD
+        loadCases();
+
+    </script>
+
+</body>
+</html>
