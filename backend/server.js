@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
-
+const usersRoutes = require("./routes/users");
 const casesRoutes = require("./routes/cases");
 const authRoutes = require("./routes/auth");
 
@@ -12,7 +12,7 @@ app.use(express.json());
 
 app.use("/api/cases", casesRoutes);
 app.use("/api/auth", authRoutes);
-
+app.use("/api/users", usersRoutes);
 app.get("/", (req, res) => {
     res.json({
         system: "CCUMS-MISUNGWI",
